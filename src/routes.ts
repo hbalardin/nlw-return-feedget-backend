@@ -1,6 +1,5 @@
 import express from 'express';
 import { createTransport } from 'nodemailer';
-import { prisma } from './prisma';
 
 export const routes = express.Router();
 
@@ -15,10 +14,6 @@ const transport = createTransport({
 
 routes.post('/feedbacks', async (request, response) => {
   const { type, comment, screenshot } = request.body;
-
-  await prisma.feedback.create({
-    data: { type, comment, screenshot },
-  });
 
   await transport.sendMail({
     subject: 'Feedback recebido',
