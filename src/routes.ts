@@ -1,5 +1,7 @@
 import express from 'express';
 import { createTransport } from 'nodemailer';
+import { PrismaFeedbacksRepository } from './repositories/prisma/prisma-feedbacks-repository';
+import { SubmitFeedbacksUseCase } from './use-cases/submit-feedback-use-case';
 
 export const routes = express.Router();
 
@@ -14,6 +16,13 @@ const transport = createTransport({
 
 routes.post('/feedbacks', async (request, response) => {
   const { type, comment, screenshot } = request.body;
+
+  const prismaFeedbacksRepository = new PrismaFeedbacksRepository();
+  const submitFeedbackUseCase = new SubmitFeedbacksUseCase(
+    prismaFeedbacksRepository
+  );
+
+  await submitFeedbackUseCase.execute({ type, comment, screenshot });
 
   await transport.sendMail({
     subject: 'Feedback recebido',
