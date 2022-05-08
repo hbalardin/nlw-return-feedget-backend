@@ -1,5 +1,8 @@
+import dotenv from 'dotenv';
 import { createTransport } from 'nodemailer';
 import { MailAdapter, SendMailData } from '../mail-adapter';
+
+dotenv.config();
 
 const transport = createTransport({
   host: 'smtp.mailtrap.io',
